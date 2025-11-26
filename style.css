@@ -1,0 +1,13 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    /*background: #000; /* match the canvas/scene background */
+}
+
+
+/* Make the canvas fill its container without extra gaps */
+canvas {
+    display: block;
+}

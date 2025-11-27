@@ -1,27 +1,29 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import { World } from './world';
 
 // Renderer
 const renderer = new THREE.WebGLRenderer();
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x80a0e0)
 document.body.appendChild(renderer.domElement);
 
 //Setup camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight);
-camera.position.set(2, 2, 2)
-camera.lookAt(0, 0, 0);
+camera.position.set(-32, 16, -32)
 
 //Control Setup
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true; 
+controls.enableDamping = true;
+controls.target.set(16, 0, 16);
+controls.update();
 
 //Scene setup
 const scene = new THREE.Scene();
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshLambertMaterial({color: 0x00d000})
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+const world = new World();
+world.generate();
+scene.add(world);
 
 function setupLights() {
     const light1 = new THREE.DirectionalLight();
@@ -37,8 +39,6 @@ function setupLights() {
     scene.add(ambient);
 }
 
-//
-
 //Render loop
 function animate() {
     requestAnimationFrame(animate);
@@ -52,9 +52,9 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth /  window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    controls.update()
+    //controls.update()
 })
 
 setupLights();
-animate()
+animate();
 

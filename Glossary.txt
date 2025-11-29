@@ -1,0 +1,10 @@
+
+*SimplexNoise
+
+Se utiliza para generar ruido suave y natural que sirve como base para crear terrenos, montañas, nubes, 
+texturas orgánicas y cualquier patrón procedural en Three.js. A diferencia del ruido aleatorio puro, 
+el ruido simplex produce variaciones continuas y fluidas, lo que permite obtener paisajes y formas que 
+parecen reales, sin líneas o patrones repetitivos. También es más eficiente que Perlin Noise tradicional 
+y se usa mucho en proyectos de generación de mundos, animaciones de agua, fuego, niebla, shaders y efectos 
+visuales que requieren un comportamiento natural pero controlado matemáticamente.
+

@@ -18,3 +18,24 @@ export class RNG {
       return result;
   }
 }
+
+/**
+ * Este código implementa un generador de números pseudoaleatorios con seed, 
+ * y se usa en proyectos de Three.js cuando se necesita que el “azar” sea siempre 
+ * el mismo para un mismo valor inicial. A diferencia de Math.random(), 
+ * que cambia en cada ejecución, este RNG permite crear mundos, terrenos, partículas 
+ * o animaciones procedurales que se generen siempre igual, lo cual es esencial para depurar, 
+ * sincronizar simulaciones, reproducir escenas de forma exacta o compartir un mismo mundo en 
+ * juegos tipo voxel usando solo un seed. En resumen, da un “azar controlado” que garantiza 
+ * resultados reproducibles en cualquier navegador.
+ */
+
+/**
+ * ¿Por qué no usar Math.random()?
+
+Porque este RNG:
+-es rápido
+-es determinista
+-permite seed reproducibles
+-funciona igual en todos los navegadores
+ */

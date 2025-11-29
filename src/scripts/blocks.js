@@ -19,8 +19,6 @@ const textures = {
     ironOre: loadTexture('/textures/iron_ore.png')
 };
 
-
-
 export const blocks = {
     empty: {
         id: 0,

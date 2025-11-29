@@ -3,7 +3,9 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 import { World } from './world';
 import { createUI } from './ui';
+import { Player } from './player';
 
+//Stats
 const stats = new Stats();
 document.body.appendChild(stats.dom);
 
@@ -32,6 +34,11 @@ const world = new World();
 world.generate();
 scene.add(world);
 
+// Player
+const player = new Player(scene)
+
+
+//Lights
 function setupLights() {
     const sun = new THREE.DirectionalLight();
     sun.position.set(50, 50, 50);
@@ -46,7 +53,6 @@ function setupLights() {
     sun.shadow.mapSize = new THREE.Vector2(512, 512);
     scene.add(sun);
 
-
     //const shadowHelper = new THREE.CameraHelper(sun.shadow.camera);
 
     const ambient = new THREE.AmbientLight();
@@ -55,13 +61,17 @@ function setupLights() {
 }
 
 //Render loop
+let previousTime = performance.now();
 function animate() {
-    requestAnimationFrame(animate);
-    // cube.rotation.x += 0.01;
-    // cube.rotation.y += 0.01;
-    renderer.render(scene, camera);
+    let currentTime = performance.now()
+    let dt = (currentTime - previousTime) / 1000;
+    requestAnimationFrame(animate)
+    player.applyInputs(dt);
+    renderer.render(scene, player.camera);
     stats.update();
     controls.update();
+
+    previousTime = currentTime;
 }
 
 window.addEventListener('resize', () => {

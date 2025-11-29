@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js'
 import { RNG } from './rng';
+import { blocks } from './blocks';
 
 const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshLambertMaterial({color: 0x00d000})
+const material = new THREE.MeshLambertMaterial()
 
 export class World extends THREE.Group {
 
@@ -86,8 +87,14 @@ export class World extends THREE.Group {
                 height = Math.max(0, Math.min(height, this.size.height - 1));
 
                 //Fill in all blocks at or below the terrain height
-                for (let y = 0; y <= height; y++){
-                    this.setBlockId(x, y, z, 1);
+                for (let y = 0; y <= this.size.height; y++){
+                    if (y < height) {
+                        this.setBlockId(x, y, z, blocks.dirt.id);
+                    } else if(y === height) {
+                        this.setBlockId(x, y, z, blocks.grass.id);
+                    } else {
+                        this.setBlockId(x, y, z, blocks.empty.id);
+                    }
                 }
             }
         }
@@ -105,10 +112,12 @@ export class World extends THREE.Group {
             for (let y = 0; y < this.size.height; y++){
                 for (let z = 0; z < this.size.width; z++) {
                     const blockId = this.getBlock(x, y, z).id;
+                    const blockType = Object.values(blocks).find(x => x.id === blockId);
                     const instanceId = mesh.count;
-                    if (blockId !== 0) {
+                    if (blockId !== blocks.empty.id) {
                         matrix.setPosition(x + 0.5, y + 0.5, z + 0.5);
                         mesh.setMatrixAt(instanceId, matrix);
+                        mesh.setColorAt(instanceId, new THREE.Color(blockType.color))
                         this.setBlockInstanceId(x, y, z, instanceId);
                         mesh.count++;
                     }

@@ -11,12 +11,12 @@ function loadTexture(path) {
 }
 
 const textures = {
-    dirt: loadTexture('../../public/textures/dirt.png'),
-    grass: loadTexture('../../public/textures/grass.png'),
-    grassSide: loadTexture('../../public/textures/grass_side.png'),
-    stone: loadTexture('../../public/textures/stone.png'),
-    coalOre: loadTexture('../../public/textures/coal_ore.png'),
-    ironOre: loadTexture('../../public/textures/iron_ore.png')
+    dirt: loadTexture('/textures/dirt.png'),
+    grass: loadTexture('/textures/grass.png'),
+    grassSide: loadTexture('/textures/grass_side.png'),
+    stone: loadTexture('/textures/stone.png'),
+    coalOre: loadTexture('/textures/coal_ore.png'),
+    ironOre: loadTexture('/textures/iron_ore.png')
 };
 
 

@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js'
+import { RNG } from './rng';
 
 const geometry = new THREE.BoxGeometry();
 const material = new THREE.MeshLambertMaterial({color: 0x00d000})
@@ -13,7 +15,14 @@ export class World extends THREE.Group {
  */
     data = [];
 
-    threshold = 0.5;
+    params = {
+        seed: 0,
+        terrain: {
+            scale: 30,
+            magnitude: 0.5,
+            offset: 0.2
+        }
+    }
 
 
     constructor(size = {width:64, height:32}) {
@@ -26,14 +35,15 @@ export class World extends THREE.Group {
      */
     generate() {
         // First create the terrain data, then build meshes from it
+        this.initializeTerrain();
         this.generateTerrain();
         this.generateMeshes();
     }
 
     /**
-     * Generates the world terrain data
+     * Initializing the world terrain data
      */
-    generateTerrain() {
+    initializeTerrain() {
         this.data = [];
         for (let x = 0; x < this.size.width; x++){
             const slice = [];
@@ -41,7 +51,7 @@ export class World extends THREE.Group {
                 const row = [];
                 for (let z = 0; z < this.size.width; z++){
                     row.push({
-                        id: Math.random() > this.threshold ? 1 : 0,
+                        id: 0,
                         instanceId: null
                     });
                 }
@@ -49,6 +59,39 @@ export class World extends THREE.Group {
             }
             this.data.push(slice);
         }
+    }
+
+    /**
+     * Generates the terrain data for the world
+     */
+    generateTerrain() {
+        const rng = new RNG(this.params.seed)
+
+        const simplex = new SimplexNoise(rng);
+        for (let x = 0; x < this.size.width; x++){
+            for (let z = 0; z < this.size.width; z++){
+                // Compute the noise value at this x-z location
+                const value = simplex.noise(
+                    x / this.params.terrain.scale,
+                    z / this.params.terrain.scale
+                );
+
+                // Scale the nosie based on the magnitude/offset
+                const scaledNoise = this.params.terrain.offset + this.params.terrain.magnitude * value;
+
+                //Computing the height of the terrain at this x-z location
+                let height = Math.floor(this.size.height * scaledNoise);
+
+                //Clamping height between 0 and max height
+                height = Math.max(0, Math.min(height, this.size.height - 1));
+
+                //Fill in all blocks at or below the terrain height
+                for (let y = 0; y <= height; y++){
+                    this.setBlockId(x, y, z, 1);
+                }
+            }
+        }
+
     }
 
     generateMeshes() {

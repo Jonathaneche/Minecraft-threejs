@@ -7,7 +7,12 @@ html, body {
 }
 
 
-/* Make the canvas fill its container without extra gaps */
-canvas {
-    display: block;
+#info{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-family: sans-serif;
+    font-size: 24px;
+    color: white;
+    margin: 8px;
 }

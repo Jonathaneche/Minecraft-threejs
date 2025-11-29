@@ -28,6 +28,8 @@ export class Player{
             this.velocity.z = this.input.z;
             this.controls.moveRight(this.velocity.x * dt);
             this.controls.moveForward(this.velocity.z * dt);
+
+            document.getElementById('player-position').innerHTML = this.toString();
         }
     }
 
@@ -86,5 +88,14 @@ export class Player{
                 break;
         }
         
+    }
+
+    toString() {
+        let str = '';
+        str += `X: ${this.position.x.toFixed(3)}`;
+        str += `Y: ${this.position.y.toFixed(3)}`;
+        str += `Z: ${this.position.z.toFixed(3)}`;
+        return str;
+
     }
 }

@@ -64,6 +64,10 @@ export class Player{
             case 'KeyD':
                 this.input.x = this.maxSpeed;
                 break;
+            case 'KeyR':
+                this.position.set(32, 16, 32);
+                this.velocity.set(0, 0, 0);
+                break;
         }
     }
 
@@ -92,8 +96,8 @@ export class Player{
 
     toString() {
         let str = '';
-        str += `X: ${this.position.x.toFixed(3)}`;
-        str += `Y: ${this.position.y.toFixed(3)}`;
+        str += `X: ${this.position.x.toFixed(3)} `;
+        str += `Y: ${this.position.y.toFixed(3)} `;
         str += `Z: ${this.position.z.toFixed(3)}`;
         return str;
 

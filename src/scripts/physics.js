@@ -10,6 +10,13 @@ const collisionMaterial = new THREE.MeshBasicMaterial({
 })
 const collisionGeometry = new THREE.BoxGeometry(1.001, 1.001, 1.001);
 
+const contactMaterial = new THREE.MeshBasicMaterial({
+    wireframe: true,
+    color: 0x00ff00
+})
+
+const contactGeometry = new THREE.SphereGeometry(0.05, 6, 6);
+
 export class Physics {
     constructor(scene) {
         this.helpers = new THREE.Group();
@@ -33,21 +40,11 @@ export class Physics {
      * @param {World} world 
      */
     detectCollisions(player, world) {
-        // Clear previous helpers so red boxes don't accumulate
-        while (this.helpers.children.length) {
-            this.helpers.remove(this.helpers.children[0]);
-        }
-
         const candidates = this.broadPhase(player, world);
-        const collisions = this.narrowPhase(candidates, player);
-
-        // Visualize only the actual collisions
-        for (const col of collisions) {
-            this.addCollisionHelper(col.block);
-        }
+        const collisions = this.narrowPhase(candidates, player)
 
         if (collisions.length > 0) {
-            this.resolveCollitions(collisions);
+            this.resolveCollitions(collisions, player);
         }
     }
     /**
@@ -85,6 +82,7 @@ export class Physics {
                     if (block && block.id !== blocks.empty.id) {
                         const blockPos = { x, y , z}
                         candidates.push(blockPos);
+                        this.addCollisionHelper(blockPos);
                     }
                 }
             }
@@ -146,7 +144,8 @@ export class Physics {
                     contactPoint: closestPoint,
                     normal,
                     overlap
-                })
+                });
+                this.addContactPointHelper(closestPoint);
             }
         }
 
@@ -175,6 +174,16 @@ export class Physics {
         const blockMesh = new THREE.Mesh(collisionGeometry, collisionMaterial);
         blockMesh.position.copy(block);
         this.helpers.add(blockMesh);
+    }
+
+    /**
+     * Visualizes the contact at the point 'p'
+     * @param {{x, y, z}} p 
+     */
+    addContactPointHelper(p) {
+        const contactMesh = new THREE.Mesh(contactGeometry, contactMaterial);
+        contactMesh.position.copy(p);
+        this.helpers.add(contactMesh);
     }
 
     /**

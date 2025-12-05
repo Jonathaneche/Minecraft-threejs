@@ -33,8 +33,18 @@ export class Physics {
      * @param {World} world 
      */
     detectCollisions(player, world) {
+        // Clear previous helpers so red boxes don't accumulate
+        while (this.helpers.children.length) {
+            this.helpers.remove(this.helpers.children[0]);
+        }
+
         const candidates = this.broadPhase(player, world);
-        const collisions = this.narrowPhase(candidates, player)
+        const collisions = this.narrowPhase(candidates, player);
+
+        // Visualize only the actual collisions
+        for (const col of collisions) {
+            this.addCollisionHelper(col.block);
+        }
 
         if (collisions.length > 0) {
             this.resolveCollitions(collisions);
@@ -75,7 +85,6 @@ export class Physics {
                     if (block && block.id !== blocks.empty.id) {
                         const blockPos = { x, y , z}
                         candidates.push(blockPos);
-                        this.addCollisionHelper(blockPos);
                     }
                 }
             }

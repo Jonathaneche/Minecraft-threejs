@@ -44,6 +44,7 @@ export class Player{
             document.getElementById('player-position').innerHTML = this.toString();
         }
     }
+    
     /**
      * Updates the position of the player's bounding cylinder helper
      */

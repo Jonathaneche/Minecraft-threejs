@@ -4,7 +4,6 @@ import {  resources } from './blocks';
 export function createUI(world, player) {
     const gui = new GUI();
 
-
     const playerFolder = gui.addFolder('Player');
     playerFolder.add(player, 'maxSpeed', 1, 20).step(1).name('Max Speed');
     playerFolder.add(player.cameraHelper, 'visible').name('Show Camera Helper');

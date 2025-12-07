@@ -70,8 +70,7 @@ function animate() {
     let currentTime = performance.now()
     let dt = (currentTime - previousTime) / 1000;
     requestAnimationFrame(animate)
-    player.applyInputs(dt);
-    player.updateBoundsHelper();
+    
     physics.update(dt, player, world);
     renderer.render(scene, player.controls.isLocked? player.camera : orbitCamera);
     stats.update();

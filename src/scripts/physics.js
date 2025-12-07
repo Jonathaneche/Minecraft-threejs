@@ -46,6 +46,7 @@ export class Physics {
      * @param {World} world 
      */
     detectCollisions(player, world) {
+        player.onGround = false;
         const candidates = this.broadPhase(player, world);
         const collisions = this.narrowPhase(candidates, player)
 
@@ -140,6 +141,7 @@ export class Physics {
                 if (overlapY < overlapXZ) {
                     normal = new THREE.Vector3(0, -Math.sign(dy), 0);
                     overlap = overlapY;
+                    player.onGround = true;
                 } else {
                     normal = new THREE.Vector3(-dx, 0, -dz).normalize();
                     overlap = overlapXZ;
